@@ -2,6 +2,15 @@
 /dist
 /node_modules
 
+# Yarn 4 (Zero-Installs optional)
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 # Logs
 logs
 *.log

@@ -1,11 +1,14 @@
 FROM node:24-bullseye-slim AS base
 
+RUN corepack enable
+
 FROM base AS production_buildstage
 
 WORKDIR /home/node/app
-COPY package.json package-lock.json ./
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
 
-RUN npm ci
+RUN yarn install --immutable
 
 COPY --chown=node:node . ./
 RUN npm run build
@@ -21,11 +24,12 @@ RUN apt-get update && \
 ENV NODE_ENV=production
 
 WORKDIR /home/node/app
-COPY --chown=node:node package.json package-lock.json entrypoint.sh ./
+COPY --chown=node:node package.json yarn.lock .yarnrc.yml entrypoint.sh ./
+COPY --chown=node:node .yarn .yarn
 RUN chmod +x entrypoint.sh
 
 USER node
-RUN npm ci
+RUN yarn workspaces focus --production
 
 COPY --from=production_buildstage /home/node/app/dist /home/node/app/dist
 

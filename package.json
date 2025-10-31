@@ -8,6 +8,7 @@
   "engines": {
     "node": ">=24.0.0"
   },
+  "packageManager": "yarn@4.5.3",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
